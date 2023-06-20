@@ -35,7 +35,7 @@ render.render(scene,camera)
  */
 document.body.appendChild(render.domElement)
 
-console.log('test')
+console.log('tes')
 
 
     
