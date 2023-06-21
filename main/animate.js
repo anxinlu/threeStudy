@@ -1,5 +1,7 @@
 import * as THREE from 'three'
 
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+
 
 // 引入需要的工具
 // const { Scene,BoxGeometry,Mesh,MeshBasicMaterial,PerspectiveCamera } = THREE
@@ -23,15 +25,25 @@ renderer.setSize(window.innerWidth, window.innerHeight)  //先设置渲染器的
 
 document.body.appendChild(renderer.domElement)
 
+new OrbitControls(camera, renderer.domElement)
 
-
-
+const axesHelper = new THREE.AxesHelper(5)
+scene.add(axesHelper)
+let scale = 1
 const animate = () => {
     cube.rotation.x+= 0.01
     cube.rotation.y+= 0.01
     cube.rotation.z+= 0.01
+    
+    if(cube.position.x >= 5){
+        cube.position.x = 0
+        scale = 1
+    }else if(0< cube.position.x <5){
+        scale+= 0.005
+        cube.position.x+= 0.01
+    }
+    cube.scale.set(scale,scale,scale)
     renderer.render(scene, camera)
-
     requestAnimationFrame(animate)
 }
 
