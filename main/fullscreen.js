@@ -128,6 +128,7 @@ const animate = () => {
     renderer.render(scene, camera)
     requestAnimationFrame(animate)
 }
+animate()
 
 window.addEventListener('resize',() => {
     console.log('resize')
@@ -143,4 +144,13 @@ window.addEventListener('resize',() => {
     renderer.setPixelRatio()
 })
 
-animate()
+window.addEventListener('dblclick', () => {
+    console.log('用户点击了双击')
+    // 假设此时没有全局的dom元素
+    if(!document.fullscreenElement){
+      renderer.domElement.requestFullscreen()
+    }else{
+        // 如果此时有全屏的元素存在则退出全屏
+        document.exitFullscreen()
+    }
+})
