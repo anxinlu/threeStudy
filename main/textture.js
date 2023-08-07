@@ -15,13 +15,42 @@ const geometry = new THREE.BoxGeometry(1,1,1)
 //设置纹理
 const texture = new THREE.TextureLoader().load( './textures/xiaoxin.png' );
 //创建皮肤
-const material = new THREE.MeshBasicMaterial({color:'white', map:texture, transparent: true, opacity: 1})
+const material = new THREE.MeshLambertMaterial({color:'white', map:texture, transparent: true, opacity: 1})
 // 将骨架和皮肤融合
 const cube = new THREE.Mesh(geometry,material)
 
 texture.wrapS = THREE.MirroredRepeatWrapping;
 texture.wrapT = THREE.RepeatWrapping;
 texture.repeat.set(4, 4)
+
+// 平面
+const planeGeometry = new THREE.PlaneGeometry(1,1)
+/** MeshPhongMaterial 对应的是反射高光的材质 如果反射的光正对着眼睛的话会觉得特别的刺眼 */
+const planeMaterial = new THREE.MeshPhongMaterial(
+    { color:'text', 
+      map: texture, 
+      transparent:true , 
+      opacity: 1, 
+      side: THREE.DoubleSide,
+      shininess: 20, //高光部分的亮度，默认30
+    }
+)
+
+const planeCube = new THREE.Mesh(planeGeometry, planeMaterial)
+planeCube.position.set(2,0,0)
+
+
+scene.add(planeCube)
+
+const light = new THREE.DirectionalLight(0x404040,0.5)
+scene.add(light)
+
+gsap.to(light,{
+    intensity:10,
+    duration:6,
+    yoyo:true,
+    repeat:-1
+})
 
 
 
@@ -45,6 +74,8 @@ const renderer = new THREE.WebGLRenderer()
 renderer.setSize(window.innerWidth, window.innerHeight)  //先设置渲染器的大小之后再进行渲染
 
 document.body.appendChild(renderer.domElement)
+
+/**控制器的原理实际上是控制了相机的摆放位置实现的 */
 
 const controls = new OrbitControls(camera, renderer.domElement)
 
@@ -142,6 +173,10 @@ window.addEventListener('resize',() => {
     console.log('resize')
 
     camera.aspect = window.innerWidth / window.innerHeight; // 重新设置横向的aspect 主要是置换矩阵依赖 这个参数
+
+    // 渲染器执行render方法的时候会读取相机对象的投影矩阵属性projectionMatrix
+    // 但是不会每渲染一帧，就通过相机的属性计算投影矩阵(节约计算资源)
+    // 如果相机的一些属性发生了变化，需要执行updateProjectionMatrix ()方法更新相机的投影矩阵
     camera.updateProjectionMatrix() // 重新更新矩阵的信息 主要是用来裁剪
 
     // 根据画布的大小重新渲染渲染器

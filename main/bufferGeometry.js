@@ -26,11 +26,11 @@ const controls = new OrbitControls(camera, renderer.domElement)
 controls.enableDamping = true;    // 设置阻尼系数
 
 
-for(let i=0; i<50; i++){
+for(let i=0; i<2; i++){
     const geometry = new THREE.BufferGeometry()
-    const arr = new Float32Array(9)
+    const arr = new Float32Array(12)
 
-    for(let j=0;j<9;j++){
+    for(let j=0;j<12;j++){
         arr[j] =  Math.random() * 5
     }
 
@@ -39,7 +39,7 @@ for(let i=0; i<50; i++){
    //创建皮肤
     const material = new THREE.MeshBasicMaterial({ color, transparent:true, opacity: Math.random()})
 
-    geometry.setAttribute("position", new THREE.BufferAttribute( arr, 3 ))
+    geometry.setAttribute("position", new THREE.BufferAttribute( arr, 4 ))
 
 //     const drawCount = 2; // draw the first 2 points, only
 // geometry.setDrawRange( 0, drawCount );
